@@ -1,4 +1,4 @@
-package com.oddrock.caj2pdf.autodeal;
+package com.oddrock.caj2pdf.autodeal.utils;
 
 import java.io.File;
 import java.io.IOException;
