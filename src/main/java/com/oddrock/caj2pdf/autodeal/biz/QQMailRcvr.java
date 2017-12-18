@@ -42,10 +42,8 @@ public class QQMailRcvr {
 		}else{
 			setRcving(true);
 		}
-		logger.warn("开始接收邮件......");
 		new File(savefolder).mkdirs();
 		popMailRcvr.rcvMail(popServer, account, authcode, folderName, true, savefolder, attachDownloadDirGenerator);
-		logger.warn("结束接收邮件");
 		setRcving(false);
 	}
 }
