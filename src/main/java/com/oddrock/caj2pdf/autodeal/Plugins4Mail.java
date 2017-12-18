@@ -18,6 +18,10 @@ public class Plugins4Mail {
 		qqMailRcvr.downloadAttach();
 	}
 	
+	public void domail(Exchange exchange, String payload) throws Exception{
+		mailDirDealer.doOneMailDir();
+	}
+	
 	public String test(Exchange exchange, String payload){
 		return "Test success!";
 	}

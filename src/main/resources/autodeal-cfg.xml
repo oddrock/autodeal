@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://camel.apache.org/schema/spring	http://camel.apache.org/schema/spring/camel-spring-2.13.0.xsd
+       http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<context:property-placeholder location="classpath:autodeal.properties,classpath:secret/secret.properties" />
+	<bean id="popMailRcvr" class="com.oddrock.common.mail.PopMailRcvr"/>
+	<bean id="attachDownloadDirGenerator" class="com.oddrock.common.mail.GeneralAttachDownloadDirGenerator" />
+
+	
+	<camelContext id="mail.dataflowcontext" xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder id="props" location="classpath:autodeal.properties,classpath:secret/secret.properties" />
+		<endpoint uri="seda:rcvmailsecondStage?concurrentConsumers=1&amp;blockWhenFull=true" id="rcvmailsecondStage" />
+		<endpoint uri="seda:domailsecondStage?concurrentConsumers=1&amp;blockWhenFull=true" id="domailsecondStage" />
+		
+		<route id="rcvmail">
+			<from uri="timer://rcvmail?fixedRate=true&amp;period={{qqmail.timerperiod.rcvmail}}"/>
+			<to uri="seda:rcvmailsecondStage?waitForTaskToComplete=Never&amp;concurrentConsumers=1&amp;blockWhenFull=true"/>
+		</route>
+		<route>
+			<from ref="rcvmailsecondStage" />
+			<to uri="bean:plugins4Mail?method=rcv" />
+		</route>
+		
+		<route id="domail">
+			<from uri="timer://domail?fixedRate=true&amp;period={{qqmail.timerperiod.domail}}"/>
+			<to uri="seda:domailsecondStage?waitForTaskToComplete=Never&amp;concurrentConsumers=1&amp;blockWhenFull=true"/>
+		</route>
+		<route>
+			<from ref="domailsecondStage" />
+			<to uri="bean:plugins4Mail?method=domail" />
+		</route>
+		
+		<route id="test">
+			<from uri="jetty:http://0.0.0.0:19099/autodeal/test?matchOnUriPrefix=true" />
+			<to uri="bean:plugins4Mail?method=test" />
+		</route>
+	</camelContext>
+
+</beans>

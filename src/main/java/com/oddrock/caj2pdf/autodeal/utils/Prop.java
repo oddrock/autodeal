@@ -1,8 +1,5 @@
 package com.oddrock.caj2pdf.autodeal.utils;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.oddrock.common.prop.PropertiesReader;
 
 public class Prop {
@@ -14,17 +11,8 @@ public class Prop {
 	private static void load(){
 		PR.addFilePath("autodeal.properties");
 		PR.loadProperties();
-		File dir = new File(Prop.get("props.dirpath"));
-		for(File file : dir.listFiles()){
-			if(file.isFile() && file.getName().endsWith("properties")){
-				try {
-					PR.addFilePath(file.getCanonicalPath());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				PR.loadProperties();
-			}
-		}
+		PR.addFilePath("secret/secret.properties");
+		PR.loadProperties();
 	}
 	
 	public static String get(String key){

@@ -2,6 +2,6 @@
 /.settings
 .classpath
 .project
-/src/main/resources/
-/settings/
+/src/main/resources/secret/
+/record/
 TODO.md
