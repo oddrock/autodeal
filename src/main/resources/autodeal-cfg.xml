@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://camel.apache.org/schema/spring	http://camel.apache.org/schema/spring/camel-spring-2.13.0.xsd
        http://www.springframework.org/schema/context	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-	<context:property-placeholder location="classpath:autodeal.properties,classpath:secret/secret.properties" />
+	<context:property-placeholder location="classpath:autodeal.properties,classpath:secret/*.properties" />
 	<bean id="popMailRcvr" class="com.oddrock.common.mail.PopMailRcvr"/>
 	<bean id="attachDownloadDirGenerator" class="com.oddrock.common.mail.GeneralAttachDownloadDirGenerator" />
 
